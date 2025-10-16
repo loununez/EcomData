@@ -71,3 +71,11 @@ EcomData está pensada para que los consultores y agencias puedan tener una sola
 | Control de versiones | GitHub |
 
 ---
+
+Participantes del proyecto
+
+- Kuperman Sebastián
+
+- Emira Toranzo
+
+- Lourdes Nuñez
