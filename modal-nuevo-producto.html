@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Nuevo Producto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="administracion-body">
+
+    <header class="header-usuarios">
+        <div class="header-left">
+            <a href="administracion.html" class="volver-link">&leftarrow; Volver a Admin</a>
+            <h1>Productos</h1>
+        </div>
+        <a href="modal-nuevo-producto.html" class="boton-agregar-usuario">Nuevo producto</a>
+    </header>
+
+    <div class="catalog-tabs-bar">
+        <a href="catalogo-productos.html" class="catalog-tab active">Productos</a>
+        <a href="catalogo-categorias.html" class="catalog-tab">Categorías</a>
+    </div>
+
+    
+
+    <div class="catalog-content">
+        <h2 class="section-title">Lista de Productos</h2>
+        <p class="section-subtitle">Gestiona el inventario de productos</p>
+
+        <div class="search-filter-bar">
+            <input type="text" class="search-input" placeholder="Buscar productos...">
+            <button class="filter-button">Filtros</button>
+        </div>
+
+        <div class="product-item">
+            <div class="product-details">
+                <h4>Producto <span class="status-tag activo">Activo</span></h4>
+                <p class="product-meta">Categoría • Stock: 15 • $</p>
+            </div>
+            <button class="delete-button" title="Eliminar">&#128465;</button>
+        </div>
+
+        <div class="product-item">
+            <div class="product-details">
+                <h4>Producto <span class="status-tag activo">Activo</span></h4>
+                <p class="product-meta">Categoría • Stock: 32 • $</p>
+            </div>
+            <button class="delete-button" title="Eliminar">&#128465;</button>
+        </div>
+
+        <div class="product-item">
+            <div class="product-details">
+                <h4>Producto <span class="status-tag activo">Activo</span></h4>
+                <p class="product-meta">Categoría • Stock: 8 • $</p>
+            </div>
+            <button class="delete-button" title="Eliminar">&#128465;</button>
+        </div>
+
+        <div class="product-item">
+            <div class="product-details">
+                <h4>Producto <span class="status-tag agotado">Agotado</span></h4>
+                <p class="product-meta">Categoría • Stock: 0 • $</p>
+            </div>
+            <button class="delete-button" title="Eliminar">&#128465;</button>
+        </div>
+
+        <div class="product-item">
+            <div class="product-details">
+                <h4>Producto <span class="status-tag activo">Activo</span></h4>
+                <p class="product-meta">Categoría • Stock: 25 • $</p>
+            </div>
+            <button class="delete-button" title="Eliminar">&#128465;</button>
+        </div>
+    </div>>
+    
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Nuevo Producto</h3>
+                <a href="catalogo-productos.html" class="modal-cerrar">×</a>
+            </div>
+            <p class="modal-subtitle">Completa la información del producto para agregarlo al catálogo</p>
+
+            <form>
+                <div class="form-group">
+                    <label for="nombreProducto">Nombre del Producto</label>
+                    <input type="text" id="nombreProducto" class="form-input">
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="sku">SKU</label>
+                        <input type="text" id="sku" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categoria">Categoría</label>
+                        <select id="categoria" class="form-input form-select">
+                            <option>Seleccionar categoría</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="costo">Costo</label>
+                        <input type="text" id="costo" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="precio">Precio</label>
+                        <input type="text" id="precio" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stockInicial">Stock Inicial</label>
+                        <input type="text" id="stockInicial" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stockMinimo">Stock Mínimo</label>
+                        <input type="text" id="stockMinimo" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcionProducto">Descripción</label>
+                    <textarea id="descripcionProducto" class="form-textarea"></textarea>
+                </div>
+
+                <button type="submit" class="form-submit-button">Agregar Producto</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

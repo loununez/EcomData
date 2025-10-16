@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Base de Clientes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="ventas-body">
+    
+    <header class="header-inventario">
+        <div class="header-left">
+            <a href="panel.html" class="volver-link">← Volver</a>
+            <h1>Clientes</h1>
+        </div>
+        </header>
+
+    <main class="main-inventario-content">
+
+        <section class="catalogo-inventario"> <h2 class="titulo-seccion">Base de Clientes</h2>
+            <p class="subtitulo-seccion">Análisis completo de comportamiento y estado de clientes</p>
+
+            <div class="controles-inventario">
+                <input type="text" placeholder="Buscar por nombre o email..." class="buscador-inventario">
+                
+                <select class="filtro-inventario filtro-estado-cliente">
+                    <option>Todos los Estados</option>
+                </select>
+            </div>
+
+            <div class="tabla-contenedor">
+                <table class="tabla-productos tabla-clientes">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Estado</th>
+                            <th>Compras</th>
+                            <th>Total Gastado</th>
+                            <th>Ticket Promedio</th>
+                            <th>Última Compra</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p class="cliente-nombre-tabla">Maria</p>
+                                <p class="cliente-contacto-tabla">maria@email.com</p>
+                                <p class="cliente-contacto-tabla">22222</p>
+                            </td>
+                            <td><span class="estado-cliente estado-frecuente">Frecuente</span></td>
+                            <td>15</td>
+                            <td>$</td>
+                            <td>$</td>
+                            <td>Fecha</td>
+                            <td><a href="#" class="boton-detalle">Ver Detalle</a></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="cliente-nombre-tabla">Carlos</p>
+                                <p class="cliente-contacto-tabla">carlos@email.com</p>
+                                <p class="cliente-contacto-tabla">22222</p>
+                            </td>
+                            <td><span class="estado-cliente estado-nuevo">Nuevo</span></td>
+                            <td>3</td>
+                            <td>$</td>
+                            <td>$</td>
+                            <td>Fecha</td>
+                            <td><a href="#" class="boton-detalle">Ver Detalle</a></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="cliente-nombre-tabla">Ana</p>
+                                <p class="cliente-contacto-tabla">ana@email.com</p>
+                                <p class="cliente-contacto-tabla">22222</p>
+                            </td>
+                            <td><span class="estado-cliente estado-frecuente">Frecuente</span></td>
+                            <td>12</td>
+                            <td>$</td>
+                            <td>$</td>
+                            <td>Fecha</td>
+                            <td><a href="#" class="boton-detalle">Ver Detalle</a></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="cliente-nombre-tabla">Luis</p>
+                                <p class="cliente-contacto-tabla">luis@email.com</p>
+                                <p class="cliente-contacto-tabla">22222</p>
+                            </td>
+                            <td><span class="estado-cliente estado-inactivo">Inactivo</span></td>
+                            <td>8</td>
+                            <td>$</td>
+                            <td>$</td>
+                            <td>Fecha</td>
+                            <td><a href="#" class="boton-detalle">Ver Detalle</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas - Catálogo y Carrito</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="ventas-body">
+    
+<header class="header-ventas">
+  <a href="panel.html" class="volver-link">← Volver</a>
+  <h1>Ventas</h1>
+</header>
+    <main class="ventas-content">
+        
+        <section class="catalogo-productos">
+            <h2>Catálogo de Productos</h2>
+            <p class="catalogo-subtitulo">Busca y selecciona productos para agregar a la venta</p>
+            
+            <input type="text" class="buscador" placeholder="Buscar por nombre o SKU...">
+            
+            <div class="productos-grid">
+                
+                <div class="producto-card">
+                    <p class="producto-nombre">Producto</p>
+                    <p class="producto-codigo">COD-1</p>
+                    <p class="producto-precio">$$$$</p>
+                    <div class="producto-footer">
+                        <span class="producto-stock stock-verde">Stock: 25</span>
+                        <a href="ventas-carrito.html"  class="boton-agregar">Agregar</a>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <p class="producto-nombre">Producto</p>
+                    <p class="producto-codigo">COD-3</p>
+                    <p class="producto-precio">$$$$</p>
+                    <div class="producto-footer">
+                        <span class="producto-stock stock-verde">Stock: 18</span>
+                        <a href="ventas-carrito.html"  class="boton-agregar">Agregar</a>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <p class="producto-nombre">Producto</p>
+                    <p class="producto-codigo">COD-2</p>
+                    <p class="producto-precio">$$$$</p>
+                    <div class="producto-footer">
+                        <span class="producto-stock stock-verde">Stock: 150</span>
+                        <a href="ventas-carrito.html"  class="boton-agregar">Agregar</a>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <p class="producto-nombre">Producto</p>
+                    <p class="producto-codigo">COD-4</p>
+                    <p class="producto-precio">$$$$</p>
+                    <div class="producto-footer">
+                        <span class="producto-stock stock-verde">Stock: 80</span>
+                        <a href="ventas-carrito.html"  class="boton-agregar">Agregar</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="carrito-compras">
+            <h2>Carrito de Compras</h2>
+            <p class="carrito-vacio">No hay productos en el carrito</p>
+        </section>
+    </main>
+</body>
+</html>

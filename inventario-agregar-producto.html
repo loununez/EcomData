@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario con Modal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="ventas-body">
+    
+    <header class="header-inventario">
+        <div class="header-left">
+            <a href="#" class="volver-link">← Volver</a>
+            <h1>Inventario</h1>
+        </div>
+        <button class="boton-agregar-producto">Agregar Producto</button>
+    </header>
+
+    <main class="main-inventario-content">
+
+        <section class="seccion-stock-bajo">
+            <h2 class="titulo-seccion">Stock Bajo</h2>
+            <p class="subtitulo-seccion">Los siguientes productos necesitan reposición</p>
+
+            <div class="lista-stock-bajo">
+                
+                <div class="stock-item">
+                    <span class="stock-item-nombre">Producto</span>
+                    <span class="stock-item-sku">(COD-1)</span>
+                    <button class="boton-reabastecer">Reabastecer</button>
+                </div>
+                
+                <div class="stock-item">
+                    <span class="stock-item-nombre">Producto</span>
+                    <span class="stock-item-sku">(COD-3)</span>
+                    <button class="boton-reabastecer">Reabastecer</button>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="catalogo-inventario">
+            <h2 class="titulo-seccion">Catálogo de Productos</h2>
+            <p class="subtitulo-seccion">Gestiona tu inventario completo desde acá</p>
+
+            <div class="controles-inventario">
+                <input type="text" placeholder="Buscar productos por nombre o SKU..." class="buscador-inventario">
+                
+                <select class="filtro-inventario">
+                    <option>Todas las Categorías</option>
+                </select>
+                
+                <select class="filtro-inventario">
+                    <option>Todos los Estados</option>
+                </select>
+            </div>
+
+            <div class="tabla-contenedor">
+                <table class="tabla-productos">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>SKU</th>
+                            <th>Categoría</th>
+                            <th>Stock</th>
+                            <th>Precio</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p class="producto-nombre-tabla">Producto</p>
+                                <p class="producto-costo-tabla">Costo: $</p>
+                            </td>
+                            <td>COD-1</td>
+                            <td>Categoría 1</td>
+                            <td>25</td>
+                            <td>$</td>
+                            <td><span class="estado-stock estado-en-stock">En Stock</span></td>
+                            <td><button class="boton-eliminar">&#128465</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="producto-nombre-tabla">Producto</p>
+                                <p class="producto-costo-tabla">Costo: $</p>
+                            </td>
+                            <td>COD-2</td>
+                            <td>Categoría 1</td>
+                            <td><span class="stock-bajo-numero">3</span></td>
+                            <td>$</td>
+                            <td><span class="estado-stock estado-stock-bajo">Stock Bajo</span></td>
+                            <td><button class="boton-eliminar">&#128465</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="producto-nombre-tabla">Producto</p>
+                                <p class="producto-costo-tabla">Costo: $</p>
+                            </td>
+                            <td>COD-3</td>
+                            <td>Categoría 2</td>
+                            <td>150</td>
+                            <td>$</td>
+                            <td><span class="estado-stock estado-en-stock">En Stock</span></td>
+                            <td><button class="boton-eliminar">&#128465</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="producto-nombre-tabla">Producto</p>
+                                <p class="producto-costo-tabla">Costo: $</p>
+                            </td>
+                            <td>COD-4</td>
+                            <td>Categoría 2</td>
+                            <td><span class="stock-bajo-numero">2</span></td>
+                            <td>$</td>
+                            <td><span class="estado-stock estado-stock-bajo">Stock Bajo</span></td>
+                            <td><button class="boton-eliminar">&#128465</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-fondo visible"> <div class="modal-container">
+            <div class="modal-header">
+                <h3>Agregar Nuevo Producto</h3>
+                <a href="inventario.html" class="modal-cerrar">×</a>
+            </div>
+            <p class="modal-subtitulo">Completa la información del producto para agregarlo al inventario</p>
+            
+            <form class="modal-form">
+                <label for="nombre">Nombre del Producto</label>
+                <input type="text" id="nombre" class="modal-input">
+
+                <label for="sku">SKU</label>
+                <input type="text" id="sku" class="modal-input">
+
+                <label for="categoria">Categoría</label>
+                <select id="categoria" class="modal-input">
+                    <option>Seleccionar categoría</option>
+                </select>
+
+                <div class="input-grupo">
+                    <div class="input-columna">
+                        <label for="costo">Costo</label>
+                        <input type="number" id="costo" class="modal-input" value="0">
+                    </div>
+                    <div class="input-columna">
+                        <label for="precio">Precio</label>
+                        <input type="number" id="precio" class="modal-input" value="0">
+                    </div>
+                </div>
+
+                <div class="input-grupo">
+                    <div class="input-columna">
+                        <label for="stock-inicial">Stock Inicial</label>
+                        <input type="number" id="stock-inicial" class="modal-input" value="0">
+                    </div>
+                    <div class="input-columna">
+                        <label for="stock-minimo">Stock Mínimo</label>
+                        <input type="number" id="stock-minimo" class="modal-input" value="5">
+                    </div>
+                </div>
+
+                <button type="submit" class="boton-modal-guardar">Agregar Producto</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

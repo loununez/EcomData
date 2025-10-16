@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios</title>
+    <link rel="stylesheet" href="styles.css"> 
+</head>
+<body class="administracion-body">
+
+    <header class="header-usuarios">
+        <div class="header-left">
+            <a href="administracion.html" class="volver-link">&leftarrow; Volver a Admin</a>
+            <h1>Usuarios</h1>
+        </div>
+        <a href="usuario-agregar-usuario.html" class="boton-agregar-usuario">Agregar Usuario</a>
+    </header>
+
+    <main class="main-usuarios-content">
+
+        <div class="tabla-usuarios-card">
+            
+            <h2 class="titulo-seccion">Lista de Usuarios</h2>
+            <p class="subtitulo-seccion">Administra todos los usuarios del sistema</p>
+            
+            <div class="controles-usuarios"> 
+                <div class="search-filter-usuarios">
+                 <input type="text" class="search-input-usuarios" placeholder="Buscar por nombre o email...">
+    
+                 <select class="filter-select-usuarios">
+                 <option>Todos los Roles</option>
+                 <option>Administrador</option>
+                <option>Vendedor</option>
+                <option>Cliente</option>
+                </select>
+    
+                 <select class="filter-select-usuarios">
+                 <option>Todos los Estados</option>
+                 <option>Activo</option>
+                 <option>Inactivo</option>
+                 <option>Pendiente</option>
+                 </select>
+                </div>
+
+
+            <div class="tabla-contenedor">
+                <table class="tabla-usuarios">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Último Acceso</th>
+                            <th>Fecha Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p class="usuario-nombre-tabla">Administrador</p>
+                                <p class="usuario-email-tabla">admin@tienda.com</p>
+                            </td>
+                            <td><span class="rol-tag tag-administrador">Administrador</span></td>
+                            <td><span class="estado-tag tag-activo">Activo</span></td>
+                            <td>fecha-hora</td>
+                            <td>fecha</td>
+                            <td>
+                                <button class="boton-editar-usuario" title="Editar">&#9998;</button>
+                                <button class="boton-eliminar-usuario" title="Eliminar">&#128465;</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="usuario-nombre-tabla">Vendedor</p>
+                                <p class="usuario-email-tabla">vendedor@tienda.com</p>
+                            </td>
+                            <td><span class="rol-tag tag-vendedor">Vendedor</span></td>
+                            <td><span class="estado-tag tag-activo">Activo</span></td>
+                            <td>fecha-hora</td>
+                            <td>fecha</td>
+                            <td>
+                                <button class="boton-editar-usuario" title="Editar">&#9998;</button>
+                                <button class="boton-eliminar-usuario" title="Eliminar">&#128465;</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="usuario-nombre-tabla">Analista de Datos</p>
+                                <p class="usuario-email-tabla">analista@tienda.com</p>
+                            </td>
+                            <td><span class="rol-tag tag-analista">Analista</span></td>
+                            <td><span class="estado-tag tag-inactivo">Inactivo</span></td>
+                            <td>fecha-hora</td>
+                            <td>fecha</td>
+                            <td>
+                                <button class="boton-editar-usuario" title="Editar">&#9998;</button>
+                                <button class="boton-eliminar-usuario" title="Eliminar">&#128465;</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
