@@ -65,9 +65,9 @@ EcomData está pensada para que los consultores y agencias puedan tener una sola
 | Área | Tecnología |
 |------|-------------|
 | Front-End | HTML, CSS, (por ahora) JavaScript |
-| Back-End | Node.js |
-| Base de Datos | PostgreSQL |
-| Contenedores y despliegue | Docker |
+| Back-End | Python (Quart) |
+| Base de Datos | SQLite (desarrollo). Opcional: PostgreSQL en producción |
+| Contenedores y despliegue | Docker (opcional) |
 | Control de versiones | GitHub |
 
 ---

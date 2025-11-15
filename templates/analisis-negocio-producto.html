@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    
+<header class="header-analysis"> 
+        <div class="header-left">
+            <a href="{{ url_for('panel.panel') }}" class="volver-link">← Volver</a>
+            <h1>Análisis del Negocio</h1>
+        </div>
+        
+        <div class="days-dropdown">
+            7 días <span>&#9660;</span>
+        </div>
+    </header>
+
+    <nav class="nav-tabs">
+        <a href="{{ url_for('analisis_negocio_resumen.analisis_negocio_resumen') }}" class="tab-item">Resumen</a>
+        <a href="{{ url_for('analisis_negocio_clientes.analisis_negocio_clientes') }}" class="tab-item">Clientes</a>
+        <a href="{{ url_for('analisis_negocio_productos.analisis_negocio_productos') }}" class="tab-item active">Productos</a>
+    </nav>
+
+    <div class="content-container">
+        <div class="analysis-card">
+            <h2 class="card-title">Rendimiento de Productos</h2>
+            <p class="card-subtitle">Análisis de ventas y márgenes</p>
+
+            <div class="product-performance-item">
+                <div class="product-line">
+                    Producto
+                    <div class="product-stats">
+                        <p>5 unidades vendidas</p>
+                        <span class="margin-tag">25% margen</span>
+                        $
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-performance-item">
+                <div class="product-line">
+                    Producto
+                    <div class="product-stats">
+                        <p>3 unidades vendidas</p>
+                        <span class="margin-tag">22% margen</span>
+                        $
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-performance-item">
+                <div class="product-line">
+                    Producto
+                    <div class="product-stats">
+                        <p>15 unidades vendidas</p>
+                        <span class="margin-tag">60% margen</span>
+                        $
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-performance-item">
+                <div class="product-line">
+                    Producto
+                    <div class="product-stats">
+                        <p>8 unidades vendidas</p>
+                        <span class="margin-tag">50% margen</span>
+                        $
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-performance-item">
+                <div class="product-line">
+                    Producto
+                    <div class="product-stats">
+                        <p>6 unidades vendidas</p>
+                        <span class="margin-tag">45% margen</span>
+                        $
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="analysis-card">
+            <h2 class="card-title">Productos Relacionados</h2>
+            <p class="card-subtitle">Patrones de compra conjunta</p>
+
+            <div class="related-product-item">
+                <div class="related-product-header">
+                    <h4>Producto + Producto</h4>
+                    <span class="confidence-tag">85% confianza</span>
+                </div>
+                <p>Los clientes que compran tal producto también compran este producto en el 85% de los casos</p>
+            </div>
+
+            <div class="related-product-item">
+                <div class="related-product-header">
+                    <h4>Producto + Producto</h4>
+                    <span class="confidence-tag">72% confianza</span>
+                </div>
+                <p>Los clientes que compran tal producto también compran este producto en el 78% de los casos</p>
+            </div>
+
+            <div class="related-product-item">
+                <div class="related-product-header">
+                    <h4>Producto + Producto</h4>
+                    <span class="confidence-tag">68% confianza</span>
+                </div>
+                <p>Los clientes que compran tal producto también compran este producto en el 50% de los casos</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

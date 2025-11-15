@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+</head>
+<body class="administracion-body">
+
+    <header class="header-usuarios">
+        <div class="header-left">
+            <a href="{{ url_for('administracion.administracion') }}" class="volver-link">&leftarrow; Volver a Admin</a>
+            <h1>Usuarios</h1>
+        </div>
+        <a href="{{ url_for('usuarios_agregar.usuarios_agregar') }}" class="boton-agregar-usuario">Agregar Usuario</a>
+    </header>
+
+    <main class="main-usuarios-content">
+
+        <div class="tabla-usuarios-card">
+            
+            <h2 class="titulo-seccion">Lista de Usuarios</h2>
+            <p class="subtitulo-seccion">Administra todos los usuarios del sistema</p>
+            
+            <div class="controles-usuarios"> 
+                <div class="search-filter-usuarios">
+                 <input type="text" class="search-input-usuarios" placeholder="Buscar por nombre o email...">
+    
+                 <select class="filter-select-usuarios">
+                 <option>Todos los Roles</option>
+                 <option>Administrador</option>
+                <option>Vendedor</option>
+                <option>Cliente</option>
+                </select>
+    
+                 <select class="filter-select-usuarios">
+                 <option>Todos los Estados</option>
+                 <option>Activo</option>
+                 <option>Inactivo</option>
+                 <option>Pendiente</option>
+                 </select>
+                </div>
+
+
+            <div class="tabla-contenedor">
+                <table class="tabla-usuarios">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Último Acceso</th>
+                            <th>Fecha Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if usuarios %}
+                            {% for usuario in usuarios %}
+                        <tr>
+                            <td>
+                                <p class="usuario-nombre-tabla">{{ usuario.nombre }}</p>
+                                <p class="usuario-email-tabla">{{ usuario.email }}</p>
+                            </td>
+                            <td><span class="rol-tag tag-{{ usuario.rol.nombre.lower() if usuario.rol else 'sin-rol' }}">{{ usuario.rol.nombre if usuario.rol else 'Sin Rol' }}</span></td>
+                            <td><span class="estado-tag tag-{{ 'activo' if usuario.activo else 'inactivo' }}">{{ 'Activo' if usuario.activo else 'Inactivo' }}</span></td>
+                            <td>-</td>
+                            <td>{{ usuario.fecha_creacion.strftime('%d/%m/%Y') if usuario.fecha_creacion else '-' }}</td>
+                            <td>
+                                <button class="boton-editar-usuario" title="Editar">&#9998;</button>
+                                <button class="boton-eliminar-usuario" title="Eliminar">&#128465;</button>
+                            </td>
+                        </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 20px;">No hay usuarios registrados</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
