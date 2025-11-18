@@ -8,9 +8,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# SQLite databases
-*.db
-ecomdata.db
 
 # Editor / OS files
 .vscode/

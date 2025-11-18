@@ -5,99 +5,590 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clientes - Base de Clientes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-checkbox input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .boton-editar-cliente, .boton-eliminar-cliente {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px 10px;
+            margin-left: 5px;
+        }
+
+        .boton-editar-cliente:hover {
+            opacity: 0.7;
+        }
+
+        .boton-eliminar-cliente:hover {
+            opacity: 0.7;
+        }
+
+        .tabla-clientes {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        .tabla-clientes thead {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tabla-clientes th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .tabla-clientes tbody tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        .tabla-clientes tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .tabla-clientes td {
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        .cliente-nombre-tabla {
+            margin: 0;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .cliente-contacto-tabla {
+            margin: 5px 0 0 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .estado-cliente {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .estado-cliente.activo {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .estado-cliente.inactivo {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .tabla-contenedor {
+            overflow-x: auto;
+        }
+
+        .tabla-clientes-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .titulo-seccion {
+            margin: 0 0 5px 0;
+            color: #333;
+            font-size: 20px;
+        }
+
+        .subtitulo-seccion {
+            margin: 0 0 20px 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .search-filter-clientes {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input-clientes {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .filter-select-clientes {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 150px;
+        }
+
+        .controles-clientes {
+            margin-bottom: 20px;
+        }
+
+        .header-clientes {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-left h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        .volver-link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .volver-link:hover {
+            color: #0056b3;
+        }
+
+        .main-clientes-content {
+            padding: 20px;
+        }
+
+        .catalogo-clientes {
+            margin: 0;
+        }
+    </style>
 </head>
 <body class="ventas-body">
     
-    <header class="header-inventario">
+    <header class="header-clientes">
         <div class="header-left">
-            <a href="{{ url_for('panel.panel') }}" class="volver-link">← Volver</a>
+            <a href="{{ url_for('panel.panel') }}" class="volver-link">&leftarrow; Volver</a>
             <h1>Clientes</h1>
         </div>
-        </header>
+    </header>
 
-    <main class="main-inventario-content">
+    <main class="main-clientes-content">
 
-        <section class="catalogo-inventario"> <h2 class="titulo-seccion">Base de Clientes</h2>
-            <p class="subtitulo-seccion">Análisis completo de comportamiento y estado de clientes</p>
+        <section class="catalogo-clientes">
+            <div class="tabla-clientes-card">
+                <h2 class="titulo-seccion">Base de Clientes</h2>
+                <p class="subtitulo-seccion">Análisis completo de comportamiento y estado de clientes</p>
 
-            <div class="controles-inventario">
-                <input type="text" placeholder="Buscar por nombre o email..." class="buscador-inventario">
-                
-                <select class="filtro-inventario filtro-estado-cliente">
-                    <option>Todos los Estados</option>
-                </select>
-            </div>
+                <div class="controles-clientes">
+                    <div class="search-filter-clientes">
+                        <input type="text" placeholder="Buscar por nombre o email..." class="search-input-clientes" id="searchInput">
+                        
+                        <select class="filter-select-clientes" id="filterEstado">
+                            <option value="">Todos los Estados</option>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
 
-            <div class="tabla-contenedor">
-                <table class="tabla-productos tabla-clientes">
-                    <thead>
-                        <tr>
-                            <th>Cliente</th>
-                            <th>Estado</th>
-                            <th>Compras</th>
-                            <th>Total Gastado</th>
-                            <th>Ticket Promedio</th>
-                            <th>Última Compra</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <p class="cliente-nombre-tabla">Maria</p>
-                                <p class="cliente-contacto-tabla">maria@email.com</p>
-                                <p class="cliente-contacto-tabla">22222</p>
-                            </td>
-                            <td><span class="estado-cliente estado-frecuente">Frecuente</span></td>
-                            <td>15</td>
-                            <td>$</td>
-                            <td>$</td>
-                            <td>Fecha</td>
-                            <td><a href="#" class="boton-detalle">Ver Detalle</a></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p class="cliente-nombre-tabla">Carlos</p>
-                                <p class="cliente-contacto-tabla">carlos@email.com</p>
-                                <p class="cliente-contacto-tabla">22222</p>
-                            </td>
-                            <td><span class="estado-cliente estado-nuevo">Nuevo</span></td>
-                            <td>3</td>
-                            <td>$</td>
-                            <td>$</td>
-                            <td>Fecha</td>
-                            <td><a href="#" class="boton-detalle">Ver Detalle</a></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p class="cliente-nombre-tabla">Ana</p>
-                                <p class="cliente-contacto-tabla">ana@email.com</p>
-                                <p class="cliente-contacto-tabla">22222</p>
-                            </td>
-                            <td><span class="estado-cliente estado-frecuente">Frecuente</span></td>
-                            <td>12</td>
-                            <td>$</td>
-                            <td>$</td>
-                            <td>Fecha</td>
-                            <td><a href="#" class="boton-detalle">Ver Detalle</a></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p class="cliente-nombre-tabla">Luis</p>
-                                <p class="cliente-contacto-tabla">luis@email.com</p>
-                                <p class="cliente-contacto-tabla">22222</p>
-                            </td>
-                            <td><span class="estado-cliente estado-inactivo">Inactivo</span></td>
-                            <td>8</td>
-                            <td>$</td>
-                            <td>$</td>
-                            <td>Fecha</td>
-                            <td><a href="#" class="boton-detalle">Ver Detalle</a></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="tabla-contenedor">
+                    <table class="tabla-clientes">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Estado</th>
+                                <th>Teléfono</th>
+                                <th>Dirección</th>
+                                <th>Fecha Registro</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientesTable">
+                            {% if clientes %}
+                                {% for cliente in clientes %}
+                            <tr data-cliente-id="{{ cliente.id }}" data-estado="{{ 'activo' if cliente.activo else 'inactivo' }}">
+                                <td>
+                                    <p class="cliente-nombre-tabla">{{ cliente.nombre }}</p>
+                                    <p class="cliente-contacto-tabla">{{ cliente.email }}</p>
+                                </td>
+                                <td><span class="estado-cliente {% if cliente.activo %}activo{% else %}inactivo{% endif %}">{{ 'Activo' if cliente.activo else 'Inactivo' }}</span></td>
+                                <td>{{ cliente.telefono or '-' }}</td>
+                                <td>{{ cliente.direccion or '-' }}</td>
+                                <td>{{ cliente.fecha_registro.strftime('%d/%m/%Y') if cliente.fecha_registro else '-' }}</td>
+                                <td>
+                                    <button class="boton-editar-cliente" onclick="abrirModalEditar({{ cliente.id }})" title="Editar">&#9998;</button>
+                                    <button class="boton-eliminar-cliente" onclick="abrirModalEliminar({{ cliente.id }}, '{{ cliente.nombre }}')" title="Eliminar">&#128465;</button>
+                                </td>
+                            </tr>
+                                {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="6">No hay clientes registrados</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </main>
+
+    <!-- Modal Editar Cliente -->
+    <div id="modalEditar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Cliente</h2>
+                <button class="close" onclick="cerrarModalEditar()">&times;</button>
+            </div>
+            <div id="alertEditar"></div>
+            <form id="formEditar">
+                <div class="form-group">
+                    <label for="editNombre">Nombre:</label>
+                    <input type="text" id="editNombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editTelefono">Teléfono:</label>
+                    <input type="tel" id="editTelefono">
+                </div>
+                <div class="form-group">
+                    <label for="editDireccion">Dirección:</label>
+                    <input type="text" id="editDireccion">
+                </div>
+                <div class="form-group form-checkbox">
+                    <input type="checkbox" id="editActivo">
+                    <label for="editActivo">Cliente Activo</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalEditar()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Eliminar Cliente -->
+    <div id="modalEliminar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirmar Eliminación</h2>
+                <button class="close" onclick="cerrarModalEliminar()">&times;</button>
+            </div>
+            <p id="mensajeEliminar"></p>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModalEliminar()">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmarEliminar()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let clienteEditandoId = null;
+        let clienteEliminarId = null;
+
+        // Filtrado de tabla
+        document.getElementById('searchInput').addEventListener('keyup', filtrarTabla);
+        document.getElementById('filterEstado').addEventListener('change', filtrarTabla);
+
+        function filtrarTabla() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const estadoValue = document.getElementById('filterEstado').value.toLowerCase();
+            
+            const filas = document.querySelectorAll('#clientesTable tr');
+            
+            filas.forEach(fila => {
+                const texto = fila.textContent.toLowerCase();
+                const estado = fila.getAttribute('data-estado');
+                
+                let mostrar = true;
+                
+                if (searchValue && !texto.includes(searchValue)) {
+                    mostrar = false;
+                }
+                
+                if (estadoValue && estado !== estadoValue) {
+                    mostrar = false;
+                }
+                
+                fila.style.display = mostrar ? '' : 'none';
+            });
+        }
+
+        // Modal Editar
+        function abrirModalEditar(clienteId) {
+            clienteEditandoId = clienteId;
+            
+            fetch(`/clientes/editar/${clienteId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('editNombre').value = data.nombre;
+                    document.getElementById('editEmail').value = data.email;
+                    document.getElementById('editTelefono').value = data.telefono || '';
+                    document.getElementById('editDireccion').value = data.direccion || '';
+                    document.getElementById('editActivo').checked = data.activo;
+                    document.getElementById('alertEditar').innerHTML = '';
+                    document.getElementById('modalEditar').style.display = 'block';
+                })
+                .catch(error => {
+                    mostrarAlertaEditar('Error al cargar los datos del cliente', 'danger');
+                });
+        }
+
+        function cerrarModalEditar() {
+            document.getElementById('modalEditar').style.display = 'none';
+            clienteEditandoId = null;
+        }
+
+        function mostrarAlertaEditar(mensaje, tipo) {
+            const alertDiv = document.getElementById('alertEditar');
+            alertDiv.innerHTML = `<div class="alert alert-${tipo}">${mensaje}</div>`;
+        }
+
+        document.getElementById('formEditar').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const datos = {
+                nombre: document.getElementById('editNombre').value,
+                email: document.getElementById('editEmail').value,
+                telefono: document.getElementById('editTelefono').value,
+                direccion: document.getElementById('editDireccion').value,
+                activo: document.getElementById('editActivo').checked
+            };
+            
+            try {
+                const response = await fetch(`/clientes/actualizar/${clienteEditandoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    mostrarAlertaEditar('Cliente actualizado correctamente', 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    mostrarAlertaEditar(result.error || 'Error al actualizar el cliente', 'danger');
+                }
+            } catch (error) {
+                mostrarAlertaEditar('Error: ' + error.message, 'danger');
+            }
+        });
+
+        // Modal Eliminar
+        function abrirModalEliminar(clienteId, nombreCliente) {
+            clienteEliminarId = clienteId;
+            document.getElementById('mensajeEliminar').textContent = 
+                `¿Está seguro de que desea eliminar el cliente "${nombreCliente}"? Esta acción no se puede deshacer.`;
+            document.getElementById('modalEliminar').style.display = 'block';
+        }
+
+        function cerrarModalEliminar() {
+            document.getElementById('modalEliminar').style.display = 'none';
+            clienteEliminarId = null;
+        }
+
+        async function confirmarEliminar() {
+            try {
+                const response = await fetch(`/clientes/eliminar/${clienteEliminarId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    cerrarModalEliminar();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                } else {
+                    alert('Error: ' + (result.error || 'No se pudo eliminar el cliente'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera del contenido
+        window.addEventListener('click', (event) => {
+            const modalEditar = document.getElementById('modalEditar');
+            const modalEliminar = document.getElementById('modalEliminar');
+            
+            if (event.target === modalEditar) {
+                cerrarModalEditar();
+            }
+            if (event.target === modalEliminar) {
+                cerrarModalEliminar();
+            }
+        });
+    </script>
+
 </body>
 </html>

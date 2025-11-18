@@ -5,6 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuarios</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-checkbox input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
 </head>
 <body class="administracion-body">
 
@@ -25,20 +173,19 @@
             
             <div class="controles-usuarios"> 
                 <div class="search-filter-usuarios">
-                 <input type="text" class="search-input-usuarios" placeholder="Buscar por nombre o email...">
+                 <input type="text" class="search-input-usuarios" placeholder="Buscar por nombre o email..." id="searchInput">
     
-                 <select class="filter-select-usuarios">
-                 <option>Todos los Roles</option>
-                 <option>Administrador</option>
-                <option>Vendedor</option>
-                <option>Cliente</option>
+                 <select class="filter-select-usuarios" id="filterRol">
+                 <option value="">Todos los Roles</option>
+                 <option value="administrador">Administrador</option>
+                <option value="vendedor">Vendedor</option>
+                <option value="cliente">Cliente</option>
                 </select>
     
-                 <select class="filter-select-usuarios">
-                 <option>Todos los Estados</option>
-                 <option>Activo</option>
-                 <option>Inactivo</option>
-                 <option>Pendiente</option>
+                 <select class="filter-select-usuarios" id="filterEstado">
+                 <option value="">Todos los Estados</option>
+                 <option value="activo">Activo</option>
+                 <option value="inactivo">Inactivo</option>
                  </select>
                 </div>
 
@@ -55,10 +202,10 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="usuariosTable">
                         {% if usuarios %}
                             {% for usuario in usuarios %}
-                        <tr>
+                        <tr data-usuario-id="{{ usuario.id }}" data-rol="{{ usuario.rol.nombre.lower() if usuario.rol else 'sin-rol' }}" data-estado="{{ 'activo' if usuario.activo else 'inactivo' }}">
                             <td>
                                 <p class="usuario-nombre-tabla">{{ usuario.nombre }}</p>
                                 <p class="usuario-email-tabla">{{ usuario.email }}</p>
@@ -68,8 +215,8 @@
                             <td>-</td>
                             <td>{{ usuario.fecha_creacion.strftime('%d/%m/%Y') if usuario.fecha_creacion else '-' }}</td>
                             <td>
-                                <button class="boton-editar-usuario" title="Editar">&#9998;</button>
-                                <button class="boton-eliminar-usuario" title="Eliminar">&#128465;</button>
+                                <button class="boton-editar-usuario" onclick="abrirModalEditar({{ usuario.id }})" title="Editar">&#9998;</button>
+                                <button class="boton-eliminar-usuario" onclick="abrirModalEliminar({{ usuario.id }}, '{{ usuario.nombre }}')" title="Eliminar">&#128465;</button>
                             </td>
                         </tr>
                             {% endfor %}
@@ -84,6 +231,222 @@
 
         </div>
     </main>
+
+    <!-- Modal Editar Usuario -->
+    <div id="modalEditar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Usuario</h2>
+                <button class="close" onclick="cerrarModalEditar()">&times;</button>
+            </div>
+            <div id="alertEditar"></div>
+            <form id="formEditar">
+                <div class="form-group">
+                    <label for="editNombre">Nombre:</label>
+                    <input type="text" id="editNombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editRol">Rol:</label>
+                    <select id="editRol" required>
+                        <option value="">Seleccionar rol...</option>
+                        {% if roles %}
+                            {% for rol in roles %}
+                        <option value="{{ rol.id }}">{{ rol.nombre }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editPassword">Nueva Contraseña (opcional):</label>
+                    <input type="password" id="editPassword" placeholder="Dejar en blanco para mantener la actual">
+                </div>
+                <div class="form-group form-checkbox">
+                    <input type="checkbox" id="editActivo">
+                    <label for="editActivo">Usuario Activo</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalEditar()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Eliminar Usuario -->
+    <div id="modalEliminar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirmar Eliminación</h2>
+                <button class="close" onclick="cerrarModalEliminar()">&times;</button>
+            </div>
+            <p id="mensajeEliminar" style="margin-bottom: 20px; color: #666;"></p>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModalEliminar()">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmarEliminar()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let usuarioEditandoId = null;
+        let usuarioEliminarId = null;
+
+        // Filtrado de tabla
+        document.getElementById('searchInput').addEventListener('keyup', filtrarTabla);
+        document.getElementById('filterRol').addEventListener('change', filtrarTabla);
+        document.getElementById('filterEstado').addEventListener('change', filtrarTabla);
+
+        function filtrarTabla() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const rolValue = document.getElementById('filterRol').value.toLowerCase();
+            const estadoValue = document.getElementById('filterEstado').value.toLowerCase();
+            
+            const filas = document.querySelectorAll('#usuariosTable tr');
+            
+            filas.forEach(fila => {
+                const texto = fila.textContent.toLowerCase();
+                const rol = fila.getAttribute('data-rol');
+                const estado = fila.getAttribute('data-estado');
+                
+                let mostrar = true;
+                
+                if (searchValue && !texto.includes(searchValue)) {
+                    mostrar = false;
+                }
+                
+                if (rolValue && rol !== rolValue) {
+                    mostrar = false;
+                }
+                
+                if (estadoValue && estado !== estadoValue) {
+                    mostrar = false;
+                }
+                
+                fila.style.display = mostrar ? '' : 'none';
+            });
+        }
+
+        // Modal Editar
+        function abrirModalEditar(usuarioId) {
+            usuarioEditandoId = usuarioId;
+            
+            // Obtener datos del usuario
+            fetch(`/usuarios/editar/${usuarioId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('editNombre').value = data.nombre;
+                    document.getElementById('editEmail').value = data.email;
+                    document.getElementById('editRol').value = data.rol_id;
+                    document.getElementById('editActivo').checked = data.activo;
+                    document.getElementById('editPassword').value = '';
+                    document.getElementById('alertEditar').innerHTML = '';
+                    document.getElementById('modalEditar').style.display = 'block';
+                })
+                .catch(error => {
+                    mostrarAlertaEditar('Error al cargar los datos del usuario', 'danger');
+                });
+        }
+
+        function cerrarModalEditar() {
+            document.getElementById('modalEditar').style.display = 'none';
+            usuarioEditandoId = null;
+        }
+
+        function mostrarAlertaEditar(mensaje, tipo) {
+            const alertDiv = document.getElementById('alertEditar');
+            alertDiv.innerHTML = `<div class="alert alert-${tipo}">${mensaje}</div>`;
+        }
+
+        document.getElementById('formEditar').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const datos = {
+                nombre: document.getElementById('editNombre').value,
+                email: document.getElementById('editEmail').value,
+                rol_id: parseInt(document.getElementById('editRol').value),
+                activo: document.getElementById('editActivo').checked,
+            };
+            
+            if (document.getElementById('editPassword').value) {
+                datos.password = document.getElementById('editPassword').value;
+            }
+            
+            try {
+                const response = await fetch(`/usuarios/actualizar/${usuarioEditandoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    mostrarAlertaEditar('Usuario actualizado correctamente', 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    mostrarAlertaEditar(result.error || 'Error al actualizar el usuario', 'danger');
+                }
+            } catch (error) {
+                mostrarAlertaEditar('Error: ' + error.message, 'danger');
+            }
+        });
+
+        // Modal Eliminar
+        function abrirModalEliminar(usuarioId, nombreUsuario) {
+            usuarioEliminarId = usuarioId;
+            document.getElementById('mensajeEliminar').textContent = 
+                `¿Está seguro de que desea eliminar al usuario "${nombreUsuario}"? Esta acción no se puede deshacer.`;
+            document.getElementById('modalEliminar').style.display = 'block';
+        }
+
+        function cerrarModalEliminar() {
+            document.getElementById('modalEliminar').style.display = 'none';
+            usuarioEliminarId = null;
+        }
+
+        async function confirmarEliminar() {
+            try {
+                const response = await fetch(`/usuarios/eliminar/${usuarioEliminarId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    cerrarModalEliminar();
+                    // Recargar la página después de 500ms
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                } else {
+                    alert('Error: ' + (result.error || 'No se pudo eliminar el usuario'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera del contenido
+        window.addEventListener('click', (event) => {
+            const modalEditar = document.getElementById('modalEditar');
+            const modalEliminar = document.getElementById('modalEliminar');
+            
+            if (event.target === modalEditar) {
+                cerrarModalEditar();
+            }
+            if (event.target === modalEliminar) {
+                cerrarModalEliminar();
+            }
+        });
+    </script>
 
 </body>
 </html>

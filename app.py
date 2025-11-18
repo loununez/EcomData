@@ -25,6 +25,7 @@ from modules.nueva_categoria.routes import nueva_categoria_bp
 from modules.reportes.routes import reportes_bp
 from modules.configuracion_general.routes import configuracion_general_bp
 from modules.configuracion_notificaciones.routes import configuracion_notificaciones_bp
+from modules.configuracion_seguridad.routes import configuracion_seguridad_bp
 from modules.auth.routes import auth_bp
 
 def create_app():
@@ -53,6 +54,7 @@ def create_app():
     app.register_blueprint(reportes_bp, url_prefix='/reportes')
     app.register_blueprint(configuracion_general_bp, url_prefix='/configuracion_general')
     app.register_blueprint(configuracion_notificaciones_bp, url_prefix='/configuracion_notificaciones')
+    app.register_blueprint(configuracion_seguridad_bp, url_prefix='/configuracion_seguridad')
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
     # Set secret key for session handling (read from env or use dev fallback)
