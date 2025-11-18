@@ -17,10 +17,10 @@ def test_creacion_usuario_completa(driver):
 
     wait.until(EC.url_contains("/panel"))
 
-    # --- Ir a usuarios ---
+    # Ir a usuarios
     driver.get("http://127.0.0.1:5000/usuarios/")
 
-    # --- Clic en botón Agregar Usuario ---
+    # Clic en botón Agregar Usuario 
     boton_agregar = wait.until(
         EC.element_to_be_clickable((By.CLASS_NAME, "boton-agregar-usuario"))
     )
@@ -29,7 +29,7 @@ def test_creacion_usuario_completa(driver):
     # Esperar redirección a la página de agregar usuario
     wait.until(EC.url_contains("/usuarios_agregar"))
 
-    # --- Completar formulario ---
+    # Completar formulario 
     driver.find_element(By.NAME, "nombre").send_keys("Test Usuario Selenium1")
     
     email = f"selenium_user_{uuid.uuid4().hex[:6]}@example.com"
@@ -45,6 +45,10 @@ def test_creacion_usuario_completa(driver):
     # Luego de guardar debe volver a /usuarios/
     wait.until(EC.url_contains("/usuarios"))
 
-    # --- Verificar que el usuario aparece ---
-    body_text = driver.find_element(By.TAG_NAME, "body").text
-    assert "selenium_user@example.com" in body_text
+    # Verificar que el usuario aparece 
+    wait.until(EC.text_to_be_present_in_element(
+        (By.TAG_NAME, "body"),
+        email
+    ))
+    
+  
