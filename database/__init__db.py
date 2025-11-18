@@ -1,6 +1,7 @@
 import asyncio
 import argparse
 from database.database import engine, Base
+from database.database import Base
 
 # Importar todos los modelos ANTES de crear las tablas
 from models.rol import Rol

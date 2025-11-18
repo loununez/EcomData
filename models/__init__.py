@@ -1,3 +1,7 @@
+from database.database import Base
+
+
+#
 from .usuario import Usuario
 from .rol import Rol
 from .categoria import Categoria

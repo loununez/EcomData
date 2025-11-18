@@ -2,7 +2,7 @@ from quart import Blueprint, render_template, request, redirect, url_for, sessio
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from database.database import AsyncSessionLocal
-from models import Usuario
+from models.usuario import Usuario
 import bcrypt
 
 auth_bp = Blueprint("auth", __name__)
