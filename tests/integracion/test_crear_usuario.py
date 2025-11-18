@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
+import uuid
 import time
 
 
@@ -29,12 +30,15 @@ def test_creacion_usuario_completa(driver):
     wait.until(EC.url_contains("/usuarios_agregar"))
 
     # --- Completar formulario ---
-    driver.find_element(By.NAME, "nombre").send_keys("Test Usuario Selenium")
-    driver.find_element(By.NAME, "email").send_keys("selenium_user@example.com")
+    driver.find_element(By.NAME, "nombre").send_keys("Test Usuario Selenium1")
+    
+    email = f"selenium_user_{uuid.uuid4().hex[:6]}@example.com"
+    driver.find_element(By.NAME, "email").send_keys(email)
+
     driver.find_element(By.NAME, "password").send_keys("test1234")
 
     select_rol = driver.find_element(By.NAME, "rol")
-    select_rol.send_keys("Vendedor")
+    select_rol.send_keys("Analista")
 
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
 
