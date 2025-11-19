@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecomdata - Panel de Control</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="dashboard-body">
+    <header class="header">
+        <div class="logo">Ecomdata</div>
+        <nav class="user-info">
+            <span>Bienvenido, <strong>Administrador</strong></span>
+            <span class="notificacion">2</span>
+            <a href="configuracion_general.html" class="configuracion">Configuración</a>
+            <a href="{{ url_for('auth.logout') }}" class="cerrar-sesion">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <h1 class="titulo-panel">Panel de Control</h1>
+        <p class="subtitulo-panel">Gestiona tu negocio con datos en tiempo real y análisis de datos</p>
+
+        <div class="modulos-grid">
+            
+            <div class="modulo-card">
+                <h2>Ventas</h2>
+                <p>Registra transacciones, genera comprobantes y analiza tendencias</p>
+                <a href="{{ url_for('ventas.ventas') }}" class="boton-modulo">Acceder a Ventas</a>
+            </div>
+
+            <div class="modulo-card">
+                <h2>Inventario</h2>
+                <p>Control de stock, alertas automáticas y gestión de productos</p>
+                <a href="{{ url_for('inventario.inventario') }}" class="boton-modulo">Gestionar Inventario</a>
+            </div>
+
+            <div class="modulo-card">
+                <h2>Análisis del Negocio</h2>
+                <p>Análisis, predicciones y reportes detallados</p>
+                <a href="{{ url_for('analisis_negocio_resumen.analisis_negocio_resumen') }}"  class="boton-modulo">Ver Análisis</a>
+            </div>
+
+            <div class="modulo-card">
+                <h2>Clientes</h2>
+                <p>Gestión de clientes, segmentación y análisis de comportamiento</p>
+                <a href="{{ url_for('clientes.clientes') }}"  class="boton-modulo">Gestionar Clientes</a>
+            </div>
+
+            <div class="modulo-card">
+                <h2>Pagos</h2>
+                <p>Procesamiento de pagos, validación y control de flujo de caja</p>
+                <a href="{{ url_for('pagos.pagos') }}" class="boton-modulo">Gestionar Pagos</a>
+            </div>
+
+            <div class="modulo-card">
+                <h2>Administración</h2>
+                <p>Configuración, usuarios, reportes y gestión del sistema</p>
+                <a href="{{ url_for('administracion.administracion') }}" class="boton-modulo">Panel de Admin</a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

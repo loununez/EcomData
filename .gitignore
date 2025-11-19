@@ -1,0 +1,30 @@
+# Virtual environments
+dev/
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+# Editor / OS files
+.vscode/
+.idea/
+.DS_Store
+
+# Byte-compiled / distribution
+build/
+dist/
+*.egg-info/
+
+# Pip cache
+pip-wheel-metadata/
+
+# Logs
+*.log
+
+# Optional: env files
+.env
+.venv

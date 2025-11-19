@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogo Productos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .boton-editar-producto, .boton-eliminar-producto {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px 10px;
+            margin-left: 5px;
+        }
+
+        .boton-editar-producto:hover {
+            opacity: 0.7;
+        }
+
+        .boton-eliminar-producto:hover {
+            opacity: 0.7;
+        }
+
+        .tabla-productos {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        .tabla-productos thead {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tabla-productos th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .tabla-productos tbody tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        .tabla-productos tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .tabla-productos td {
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        .producto-nombre-tabla {
+            margin: 0;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .producto-categoria-tabla {
+            margin: 5px 0 0 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .stock-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .stock-tag.activo {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .stock-tag.agotado {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .tabla-contenedor {
+            overflow-x: auto;
+        }
+
+        .tabla-productos-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .titulo-seccion {
+            margin: 0 0 5px 0;
+            color: #333;
+            font-size: 20px;
+        }
+
+        .subtitulo-seccion {
+            margin: 0 0 20px 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .search-filter-productos {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input-productos {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .filter-select-productos {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 150px;
+        }
+
+        .controles-productos {
+            margin-bottom: 20px;
+        }
+
+        .header-productos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-left h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        .volver-link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .volver-link:hover {
+            color: #0056b3;
+        }
+
+        .boton-agregar-producto {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .boton-agregar-producto:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body class="administracion-body">
+
+    <header class="header-productos">
+        <div class="header-left">
+            <a href="{{ url_for('administracion.administracion') }}" class="volver-link">&leftarrow; Volver a Admin</a>
+            <h1>Productos</h1>
+        </div>
+        <a href="{{ url_for('nuevo_producto.nuevo_producto') }}" class="boton-agregar-producto">Nuevo Producto</a>
+    </header>
+
+    <main class="main-productos-content">
+
+        <div class="tabla-productos-card">
+            
+            <h2 class="titulo-seccion">Lista de Productos</h2>
+            <p class="subtitulo-seccion">Gestiona todos los productos del catálogo</p>
+            
+            <div class="controles-productos"> 
+                <div class="search-filter-productos">
+                    <input type="text" class="search-input-productos" placeholder="Buscar por nombre..." id="searchInput">
+        
+                    <select class="filter-select-productos" id="filterCategoria">
+                        <option value="">Todas las Categorías</option>
+                        {% if categorias %}
+                            {% for categoria in categorias %}
+                        <option value="{{ categoria.nombre.lower() }}">{{ categoria.nombre }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+        
+                    <select class="filter-select-productos" id="filterStock">
+                        <option value="">Todos los Estados</option>
+                        <option value="en-stock">En Stock</option>
+                        <option value="agotado">Agotado</option>
+                    </select>
+                </div>
+
+            <div class="tabla-contenedor">
+                <table class="tabla-productos">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productosTable">
+                        {% if productos %}
+                            {% for producto in productos %}
+                        <tr data-producto-id="{{ producto.id }}" data-categoria="{{ producto.categoria.nombre.lower() if producto.categoria else 'sin-categoria' }}" data-estado="{{ 'en-stock' if producto.stock > 0 else 'agotado' }}">
+                            <td>
+                                <p class="producto-nombre-tabla">{{ producto.nombre }}</p>
+                                <p class="producto-categoria-tabla">{{ producto.descripcion[:50] }}{% if producto.descripcion and producto.descripcion|length > 50 %}...{% endif %}</p>
+                            </td>
+                            <td>{{ producto.categoria.nombre if producto.categoria else 'Sin categoría' }}</td>
+                            <td>${{ "%.2f"|format(producto.precio) }}</td>
+                            <td>{{ producto.stock }}</td>
+                            <td><span class="stock-tag {% if producto.stock > 0 %}activo{% else %}agotado{% endif %}">{% if producto.stock > 0 %}En Stock{% else %}Agotado{% endif %}</span></td>
+                            <td>
+                                <button class="boton-editar-producto" onclick="abrirModalEditar({{ producto.id }})" title="Editar">&#9998;</button>
+                                <button class="boton-eliminar-producto" onclick="abrirModalEliminar({{ producto.id }}, '{{ producto.nombre }}')" title="Eliminar">&#128465;</button>
+                            </td>
+                        </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="6">No hay productos registrados</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal Editar Producto -->
+    <div id="modalEditar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Producto</h2>
+                <button class="close" onclick="cerrarModalEditar()">&times;</button>
+            </div>
+            <div id="alertEditar"></div>
+            <form id="formEditar">
+                <div class="form-group">
+                    <label for="editNombre">Nombre del Producto:</label>
+                    <input type="text" id="editNombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDescripcion">Descripción:</label>
+                    <textarea id="editDescripcion"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editCategoria">Categoría:</label>
+                    <select id="editCategoria" required>
+                        <option value="">Seleccionar categoría...</option>
+                        {% if categorias %}
+                            {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editPrecio">Precio:</label>
+                    <input type="number" id="editPrecio" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="editStock">Stock:</label>
+                    <input type="number" id="editStock" min="0" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalEditar()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Eliminar Producto -->
+    <div id="modalEliminar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirmar Eliminación</h2>
+                <button class="close" onclick="cerrarModalEliminar()">&times;</button>
+            </div>
+            <p id="mensajeEliminar"></p>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModalEliminar()">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmarEliminar()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let productoEditandoId = null;
+        let productoEliminarId = null;
+
+        // Filtrado de tabla
+        document.getElementById('searchInput').addEventListener('keyup', filtrarTabla);
+        document.getElementById('filterCategoria').addEventListener('change', filtrarTabla);
+        document.getElementById('filterStock').addEventListener('change', filtrarTabla);
+
+        function filtrarTabla() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const categoriaValue = document.getElementById('filterCategoria').value.toLowerCase();
+            const stockValue = document.getElementById('filterStock').value.toLowerCase();
+            
+            const filas = document.querySelectorAll('#productosTable tr');
+            
+            filas.forEach(fila => {
+                const texto = fila.textContent.toLowerCase();
+                const categoria = fila.getAttribute('data-categoria');
+                const estado = fila.getAttribute('data-estado');
+                
+                let mostrar = true;
+                
+                if (searchValue && !texto.includes(searchValue)) {
+                    mostrar = false;
+                }
+                
+                if (categoriaValue && categoria !== categoriaValue) {
+                    mostrar = false;
+                }
+                
+                if (stockValue && estado !== stockValue) {
+                    mostrar = false;
+                }
+                
+                fila.style.display = mostrar ? '' : 'none';
+            });
+        }
+
+        // Modal Editar
+        function abrirModalEditar(productoId) {
+            productoEditandoId = productoId;
+            
+            fetch(`/catalogo_productos/editar/${productoId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('editNombre').value = data.nombre;
+                    document.getElementById('editDescripcion').value = data.descripcion || '';
+                    document.getElementById('editCategoria').value = data.categoria_id;
+                    document.getElementById('editPrecio').value = data.precio;
+                    document.getElementById('editStock').value = data.stock;
+                    document.getElementById('alertEditar').innerHTML = '';
+                    document.getElementById('modalEditar').style.display = 'block';
+                })
+                .catch(error => {
+                    mostrarAlertaEditar('Error al cargar los datos del producto', 'danger');
+                });
+        }
+
+        function cerrarModalEditar() {
+            document.getElementById('modalEditar').style.display = 'none';
+            productoEditandoId = null;
+        }
+
+        function mostrarAlertaEditar(mensaje, tipo) {
+            const alertDiv = document.getElementById('alertEditar');
+            alertDiv.innerHTML = `<div class="alert alert-${tipo}">${mensaje}</div>`;
+        }
+
+        document.getElementById('formEditar').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const datos = {
+                nombre: document.getElementById('editNombre').value,
+                descripcion: document.getElementById('editDescripcion').value,
+                categoria_id: parseInt(document.getElementById('editCategoria').value),
+                precio: parseFloat(document.getElementById('editPrecio').value),
+                stock: parseInt(document.getElementById('editStock').value)
+            };
+            
+            try {
+                const response = await fetch(`/catalogo_productos/actualizar/${productoEditandoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    mostrarAlertaEditar('Producto actualizado correctamente', 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    mostrarAlertaEditar(result.error || 'Error al actualizar el producto', 'danger');
+                }
+            } catch (error) {
+                mostrarAlertaEditar('Error: ' + error.message, 'danger');
+            }
+        });
+
+        // Modal Eliminar
+        function abrirModalEliminar(productoId, nombreProducto) {
+            productoEliminarId = productoId;
+            document.getElementById('mensajeEliminar').textContent = 
+                `¿Está seguro de que desea eliminar el producto "${nombreProducto}"? Esta acción no se puede deshacer.`;
+            document.getElementById('modalEliminar').style.display = 'block';
+        }
+
+        function cerrarModalEliminar() {
+            document.getElementById('modalEliminar').style.display = 'none';
+            productoEliminarId = null;
+        }
+
+        async function confirmarEliminar() {
+            try {
+                const response = await fetch(`/catalogo_productos/eliminar/${productoEliminarId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    cerrarModalEliminar();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                } else {
+                    alert('Error: ' + (result.error || 'No se pudo eliminar el producto'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera del contenido
+        window.addEventListener('click', (event) => {
+            const modalEditar = document.getElementById('modalEditar');
+            const modalEliminar = document.getElementById('modalEliminar');
+            
+            if (event.target === modalEditar) {
+                cerrarModalEditar();
+            }
+            if (event.target === modalEliminar) {
+                cerrarModalEliminar();
+            }
+        });
+    </script>
+
+</body>
+</html>

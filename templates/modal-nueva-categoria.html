@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Nueva Categoría</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+     <header class="header-usuarios">
+        <div class="header-left">
+            <a href="{{ url_for('administracion.administracion') }}" class="volver-link">&leftarrow; Volver a Admin</a>
+            <h1>Categorias</h1>
+        </div>
+        <a href="{{ url_for('nueva_categoria.nueva_categoria') }}" class="boton-agregar-usuario">Nueva Categoria</a>
+    </header>
+        <div class="catalog-tabs-bar">
+        <a href="{{ url_for('catalogo_productos.catalogo_productos') }}" class="catalog-tab ">Productos</a>
+        <a href="{{ url_for('catalogo_categorias.catalogo_categorias') }}" class="catalog-tab active">Categorías</a>
+    </div>
+
+    <div class="catalog-content">
+        <h2 class="section-title">Categorías</h2>
+        <p class="section-subtitle">Organiza productos por categorías</p>
+
+        <div class="category-grid">
+            {% if categorias %}
+                {% for categoria in categorias %}
+            <div class="category-card">
+                <div class="category-info">
+                    <h4>{{ categoria.nombre }}</h4>
+                    <p>{{ categoria.descripcion if categoria.descripcion else 'Sin descripción' }}</p>
+                </div>
+                <div class="category-footer">
+                    <span>{{ categoria.productos|length if categoria.productos else 0 }} productos</span>
+                    <button class="delete-button" title="Eliminar">&#128465;</button>
+                </div>
+            </div>
+                {% endfor %}
+            {% else %}
+            <p style="grid-column: 1 / -1; text-align: center; padding: 20px;">No hay categorías registradas</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nueva Categoría</h3>
+               <a href="{{ url_for('catalogo_categorias.catalogo_categorias') }}" class="modal-cerrar">×</a>
+            </div>
+            <p class="modal-subtitle">Completa la información para crear una nueva categoría</p>
+
+            <form method="POST" action="{{ url_for('catalogo_categorias.catalogo_categorias') }}">
+                <div class="form-group">
+                    <label for="nombreCategoria">Nombre de la Categoría</label>
+                    <input type="text" id="nombreCategoria" name="nombreCategoria" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" name="descripcion" class="form-textarea"></textarea>
+                </div>
+
+                <button type="submit" class="form-submit-button">Crear Categoría</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

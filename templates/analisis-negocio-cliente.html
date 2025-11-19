@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    
+<header class="header-analysis"> 
+        <div class="header-left">
+            <a href="{{ url_for('panel.panel') }}" class="volver-link">← Volver</a>
+            <h1>Análisis del Negocio</h1>
+        </div>
+        
+        <div class="days-dropdown">
+            7 días <span>&#9660;</span>
+        </div>
+    </header>
+
+    <nav class="nav-tabs">
+        <a href="{{ url_for('analisis_negocio_resumen.analisis_negocio_resumen') }}" class="tab-item">Resumen</a>
+        <a href="{{ url_for('analisis_negocio_clientes.analisis_negocio_clientes') }}" class="tab-item">Clientes</a>
+        <a href="{{ url_for('analisis_negocio_productos.analisis_negocio_productos') }}" class="tab-item active">Productos</a>
+    </nav>
+
+    <div class="content-container">
+        <div class="analysis-card">
+            <h2 class="card-title">Segmentación de Clientes</h2>
+            <p class="card-subtitle">Distribución por tipo de cliente (ejemplo nuevos, frecuentes, inactivos)</p>
+            <div class="pie-chart-mock"></div>
+        </div>
+
+        <div class="analysis-card">
+            <h2 class="card-title">Clientes Destacados</h2>
+            <p class="card-subtitle">Clientes con mayor valor de compra</p>
+
+            <div class="client-item">
+                <div class="client-info">
+                    <h4>María</h4>
+                    <p>Cliente Frecuente</p>
+                </div>
+                <div class="client-value">
+                    $ <span>5 compras</span>
+                </div>
+            </div>
+            
+            <div class="client-item">
+                <div class="client-info">
+                    <h4>Ana</h4>
+                    <p>Cliente Frecuente</p>
+                </div>
+                <div class="client-value">
+                    $ <span>2 compras</span>
+                </div>
+            </div>
+            
+            <div class="client-item">
+                <div class="client-info">
+                    <h4>Carlos</h4>
+                    <p>Cliente Nuevo</p>
+                </div>
+                <div class="client-value">
+                    $ <span>8 compras</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
